@@ -1,0 +1,28 @@
+Version  Branch  Description
+1.0      Master  The DDT PC1 projection is l2-normalized as spatial weight.
+1.2      Master  The DDT PC1 projection is relu, then l2-normalized.
+1.4      Master  The DDT PC1 projection is relu, then l2-normalized. Ignore 0
+                 case.
+1.6      Master  The DDT PC1 projection is relu, then l2,sqrt-normalized. Ignore
+                 0 case.
+1.8      Dev     The DDT PC1 projection is relu. Ignore 0 case.
+1.10     Dev     The DDT PC1 projection is relu, then l2,sqrt-normalized. Ignore
+                 0 case. The channel weight is sum-pooled and them l2-normalized
+1.12     Dev     The DDT PC1 projection is relu, then l2,sqrt-normalized. Ignore
+                 0 case. We keep the maximial connected component by value.
+1.14     Dev     The DDT PC1 projection is relu, then l2,sqrt-normalized. Ignore
+                 0 case. We keep the maximial connected component by area.
+1.16     Dev     The DDT PC1 projection is relu, then l2,sqrt-normalized. Ignore
+                 0 case. Weight the descriptor by the area.
+1.18     Dev     The DDT PC1 projection is relu, then l2,sqrt-normalized. Ignore
+                 0 case. Binary weight.
+1.20     Dev     The DDT PC1 projection is relu, then l2,sqrt-normalized. Ignore
+                 0 case. Data augmentation by horiontal flipping before DDT.
+1.22     Dev     The DDT PC1 projection is relu, then l2,sqrt-normalized. Ignore
+                 0 case. Data augmentation by random rotating before DDT.
+1.24     Dev     The DDT PC1 projection is relu, then l2,sqrt-normalized. Ignore
+                 0 case. Data augmentation by random resize before DDT.
+1.26     Dev     Consider PC2.
+1.28     Dev     pc1->relu->l2->sqrt, ignore 0 case. Add DDT refine step.
+2.0      Dev     The DDT PC1 projection is relu, then l2,sqrt-normalized. Ignore
+                 0 case. Use Python3.6.

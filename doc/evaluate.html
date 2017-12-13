@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module evaluate</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>evaluate</strong></big></big> (version 2.0, 2017-09-29)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/data/zhangh/project/ddt/src/ddt/evaluate.py">/data/zhangh/project/ddt/src/ddt/evaluate.py</a></font></td></tr></table>
+    <p><tt>Find&nbsp;features&nbsp;for&nbsp;query&nbsp;images&nbsp;and&nbsp;evaluate&nbsp;the&nbsp;result.<br>
+&nbsp;<br>
+We&nbsp;use&nbsp;the&nbsp;DDT&nbsp;PC1&nbsp;projections&nbsp;as&nbsp;the&nbsp;part&nbsp;detector&nbsp;to&nbsp;perform&nbsp;weighted<br>
+sum-pooling&nbsp;of&nbsp;pool5&nbsp;features&nbsp;to&nbsp;obtain&nbsp;the&nbsp;final&nbsp;descriptor.<br>
+&nbsp;<br>
+This&nbsp;program&nbsp;is&nbsp;modified&nbsp;from&nbsp;CroW:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;https://github.com/yahoo/crow/<br>
+&nbsp;<br>
+The&nbsp;compute_ap&nbsp;executable&nbsp;file&nbsp;is&nbsp;modified&nbsp;from&nbsp;VGG:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.robots.ox.ac.uk/~vgg/data/oxbuildings/">http://www.robots.ox.ac.uk/~vgg/data/oxbuildings/</a><br>
+To&nbsp;compute&nbsp;the&nbsp;average&nbsp;precision&nbsp;for&nbsp;a&nbsp;ranked&nbsp;list&nbsp;of&nbsp;query&nbsp;christ_church_1,<br>
+run:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;./compute_ap&nbsp;christ_church_1&nbsp;ranked_list.txt</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+<a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="pickle.html">pickle</a><br>
+<a href="sklearn.html">sklearn</a><br>
+</td><td width="25%" valign=top><a href="tempfile.html">tempfile</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="evaluate.html#EvaluateManager">EvaluateManager</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="EvaluateManager">class <strong>EvaluateManager</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Manager&nbsp;class&nbsp;to&nbsp;compute&nbsp;mAP.<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_descriptor_model,&nbsp;sklearn.decomposition.PCA:&nbsp;Model&nbsp;for&nbsp;PC1&nbsp;computation.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_paths,&nbsp;dict&nbsp;of&nbsp;(str,&nbsp;str):&nbsp;Feature&nbsp;paths.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_pca_model,&nbsp;sklearn.decomposition.PCA:&nbsp;Model&nbsp;for&nbsp;final&nbsp;PCA&nbsp;whitening.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="EvaluateManager-__init__"><strong>__init__</strong></a>(self, paths)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="EvaluateManager-evaluate"><strong>evaluate</strong></a>(self, crop)</dt><dd><tt>Evaluate&nbsp;the&nbsp;retrieval&nbsp;results.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;crop,&nbsp;bool:&nbsp;Whether&nbsp;to&nbsp;use&nbsp;whitening.</tt></dd></dl>
+
+<dl><dt><a name="EvaluateManager-fitPca"><strong>fitPca</strong></a>(self, dim, whiten)</dt><dd><tt>Compute&nbsp;PCA&nbsp;whitening&nbsp;paramters&nbsp;from&nbsp;the&nbsp;via&nbsp;dataset.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;via_pool5_path,&nbsp;str:&nbsp;Pool5&nbsp;feature&nbsp;path&nbsp;of&nbsp;the&nbsp;via&nbsp;dataset.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dim,&nbsp;int:&nbsp;Dimension&nbsp;of&nbsp;the&nbsp;final&nbsp;retrieval&nbsp;descriptor.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;whiten,&nbsp;bool:&nbsp;Whether&nbsp;to&nbsp;use&nbsp;whitening.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__all__</strong> = ['EvaluateManager']<br>
+<strong>__copyright__</strong> = 'Copyright @2017 LAMDA'<br>
+<strong>__email__</strong> = 'zhangh0214@gmail.com'<br>
+<strong>__license__</strong> = 'CC BY-SA 3.0'<br>
+<strong>__status__</strong> = 'Development'<br>
+<strong>__updated__</strong> = '2017-11-24'</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Hao&nbsp;Zhang</td></tr></table>
+</body></html>

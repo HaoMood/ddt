@@ -1,0 +1,125 @@
+             DDT: Deep Descriptor Transforming for Image Retrieval
+
+
+DESCRIPTIONS
+    This repository includes a Python implementation of DDT, which is a simple
+    yet effective unsupervised approach, for image retrieval. A full
+    description of this work can be found in the paper.
+
+    The idea of DDT is that, the convolutional activations could act as a
+    detector for the common object. DDT evaluates the correlations of
+    descriptors and then obtaining the category-consistent regions, which
+    accurately locate the common object in a set of images.
+
+    Different from DDT, SCDA assumes only an object of interest in each image,
+    and without objects from other categories. SCDA's strategy is based on the
+    activation tensor of a single image. Apparently, SCDA cannot work well for
+    images containing diverse objects, and also cannot handle data noise.
+
+    What distinguishes DDT from SCDA is that we can leverage the correlations
+    beneath the whole image set, instead of a single image. DDT utilizes PCA
+    as projection directions for transforming column descriptors to evaluate
+    their correlations.
+
+    In DDT, we compute PC1 for all the column descriptors in the dataset. The
+    PC1 projections reflect the correlations of these column descriptors. The
+    positive correlation indicate the common characteristic throughout the
+    dataset. Specifically, the corresponding positive correlation indicates
+    indeed the common object inside these images; the negative correlation
+    presents background objects rarely appear.
+
+    Note that we do not collect the largest connected component, which is
+    different from the DDT paper. We use the PC1 projections as spatial weights
+    for weighted sum-pooling.
+
+    We learn the PCA whitening parameters from a separate set of images. To be
+    comparable with related works, we learn the PCA whitening parameters on
+    Oxford when testing on Paris and vice versa, as accustomed. We use the
+    Oxford100k dataset for whitening on the Holidays.
+
+    We can use cropped images or full images for query. When we use cropped
+    queries to evaluate, we regard the cropped region as input for the CNN and
+    extract featrures.
+
+
+REFERENCE
+    X.-S. Wei, C.-L. Zhang, Y. Li, C.-W. Xie, J. Wu, C. Shen, and Z.-H. Zhou.
+    Deep Descriptor Transforming for Image Co-Localization. In Proceedings of
+    the International Joint Conference on Artificial Intelligence, pages
+    3048--3054, 2017.
+
+
+PREREQUIREMENTS
+    Caffe with Python interface supported
+    Python3.6 with Numpy, PIL, sklearn supported
+
+
+LAYOUT
+   Data
+    ./data/oxford5k/
+        ./data/oxford5k/conv/            # Convolution feature maps
+            ./data/oxford5k/conv/vgg16/all/
+            ./data/oxford5k/conv/vgg16/crop/
+            ./data/oxford5k/conv/vgg19/all/
+            ./data/oxford5k/conv/vgg19/crop/
+        ./data/oxford5k/groundtruth/     # 55*4=220 query groundtruth
+        ./data/oxford5k/image/           # Raw .jpg images
+            ./data/oxford5k/image/all/   # 5063 database images
+            ./data/oxford5k/image/crop/  # 55 crop query images
+        ./data/oxford5k/descriptor_model.pkl  # PC1 model for DDT
+    ./data/paris6k/
+        # Similar to oxford5k, with 6392 database and 55 query images
+
+
+
+USAGE
+    Step 1. Extract crop query images and extract relu5-4 features.
+        $ ./src/get/get_query.py --dataset oxford5k
+        $ ./src/get/get_query.py --dataset paris6k
+
+        # Extract pool5 features.
+        $ ./src/get/get_conv.py --dataset oxford5k --model vgg19 --gpu 0
+        $ ./src/get/get_conv.py --dataset paris6k --model vgg19 --gpu 0
+
+    Step 2. Compute DDT descriptors and evaluate.
+        # Compute DDT weights.
+        $ ./src/ddt/ddt.py --dataset oxford5k --model vgg19
+        $ ./src/ddt/ddt.py --dataset paris6k --model vgg19
+
+        # Compute mAP.
+        $ ./evaluate.py --test oxford5k --via paris6k --model vgg19
+        $ ./evaluate.py --test paris6k --via oxford5k --model vgg19
+
+
+AUTHOR
+    Hao Zhang: zhangh0214@gmail.com
+
+
+COPYRIGHT
+    This repository is free for academic usage. You can run it at your own
+    risk.
+
+
+NOTE
+    20 images out of 6412 Paris6k images are broken. As a common practice,
+    we manually removed them:
+        paris_louvre_000136.jpg
+        paris_louvre_000146.jpg
+        paris_moulinrouge_000422.jpg
+        paris_museedorsay_001059.jpg
+        paris_notredame_000188.jpg
+        paris_pantheon_000284.jpg
+        paris_pantheon_000960.jpg
+        paris_pantheon_000974.jpg
+        paris_pompidou_000195.jpg
+        paris_pompidou_000196.jpg
+        paris_pompidou_000201.jpg
+        paris_pompidou_000467.jpg
+        paris_pompidou_000640.jpg
+        paris_sacrecoeur_000299.jpg
+        paris_sacrecoeur_000330.jpg
+        paris_sacrecoeur_000353.jpg
+        paris_triomphe_000662.jpg
+        paris_triomphe_000833.jpg
+        paris_triomphe_000863.jpg
+        paris_triomphe_000867.jpg
